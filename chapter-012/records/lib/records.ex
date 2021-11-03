@@ -1,18 +1,20 @@
-defmodule Records do
-  require Records.Tower
-  alias Records.Tower, as: Tower
-  """
-  Example 12.1 Examples of records
-  """
-  defmodule Planemo do
-    require Record
-    Record.defrecord :planemo, [name: :nil, gravity: 0, diameter: 0, distance_from_sun: 0]
-  end
+"""
+Example 12.1 Examples of records
+"""
+defmodule Planemo do
+  require Record
+  Record.defrecord :planemo, [name: :nil, gravity: 0, diameter: 0, distance_from_sun: 0]
+end
 
-  defmodule Tower do
-    require Record
-    Record.defrecord :tower, Tower, [location: "", height: 20, planemo: :earth, name: ""]
-  end
+defmodule Tower do
+  require Record
+  Record.defrecord :tower, Tower, [location: "", height: 20, planemo: :earth, name: ""]
+end
+
+defmodule Records do
+  require Tower
+  require Planemo
+
   """
   Example 12.2 Using records in functions
   """
@@ -41,4 +43,10 @@ defmodule Records do
   def fall_velocity(:mars, distance) do
     :math.sqrt(2 * 3.71 * distance)
   end
+
+  def setup() do
+    planemo_table = :ets.new(:planemos, [:named_table, {:keypos, Planemo.planemo(:name) + 1}])
+    :ets.info(planemo_table)
+  end
+
 end
